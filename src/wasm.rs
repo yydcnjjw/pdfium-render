@@ -911,23 +911,23 @@ pub fn initialize_pdfium_render(
     local_wasm_module: JsValue,
     debug: bool,
 ) -> bool {
-    if console_log::init_with_level(if debug {
-        log::Level::Trace
-    } else {
-        log::Level::Info
-    })
-    .is_err()
-    {
-        log::error!(
-            "pdfium-render::initialize_pdfium_render(): Error initializing console-based logging"
-        );
-    }
+    // if console_log::init_with_level(if debug {
+    //     log::Level::Trace
+    // } else {
+    //     log::Level::Info
+    // })
+    // .is_err()
+    // {
+    //     log::error!(
+    //         "pdfium-render::initialize_pdfium_render(): Error initializing console-based logging"
+    //     );
+    // }
 
-    if debug {
-        // Output full Rust stack traces to Javascript console.
+    // if debug {
+    //     // Output full Rust stack traces to Javascript console.
 
-        console_error_panic_hook::set_once();
-    }
+    //     console_error_panic_hook::set_once();
+    // }
 
     if pdfium_wasm_module.is_object() && local_wasm_module.is_object() {
         match PdfiumRenderWasmState::lock_mut().bind_to_pdfium(
