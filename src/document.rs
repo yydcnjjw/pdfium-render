@@ -3,6 +3,7 @@
 
 use crate::attachments::PdfAttachments;
 use crate::bindgen::FPDF_DOCUMENT;
+use crate::bindgen::FS_SIZEF;
 use crate::bindings::PdfiumLibraryBindings;
 use crate::bookmarks::PdfBookmarks;
 use crate::error::PdfiumError;
@@ -12,6 +13,8 @@ use crate::form::PdfForm;
 use crate::metadata::PdfMetadata;
 use crate::pages::PdfPages;
 use crate::permissions::PdfPermissions;
+use crate::points::PdfPoints;
+use crate::prelude::PdfRect;
 use crate::signatures::PdfSignatures;
 use crate::utils::files::get_pdfium_file_writer_from_writer;
 use crate::utils::files::FpdfFileAccessExt;
@@ -280,6 +283,27 @@ impl<'a> PdfDocument<'a> {
     #[inline]
     pub fn pages_mut(&mut self) -> &mut PdfPages<'a> {
         &mut self.pages
+    }
+
+    pub fn page_size_by_index(&self, page_index: usize) -> Result<PdfRect, PdfiumError> {
+        let mut size = FS_SIZEF {
+            width: 0.,
+            height: 0.,
+        };
+        if self
+            .bindings
+            .FPDF_GetPageSizeByIndexF(self.handle, page_index as i32, &mut size)
+            == 0
+        {
+            Err(PdfiumError::PageIndexOutOfBounds)
+        } else {
+            Ok(PdfRect {
+                bottom: PdfPoints::ZERO,
+                left: PdfPoints::ZERO,
+                top: PdfPoints::new(size.height),
+                right: PdfPoints::new(size.width),
+            })
+        }
     }
 
     /// Returns an immutable collection of all the [PdfPermissions] applied to this [PdfDocument].

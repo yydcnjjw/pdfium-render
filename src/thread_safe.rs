@@ -864,13 +864,6 @@ impl<T: PdfiumLibraryBindings> PdfiumLibraryBindings for ThreadSafePdfiumBinding
 
     #[inline]
     #[allow(non_snake_case)]
-    #[cfg(target_arch = "wasm32")]
-    fn FPDFBitmap_GetArray(&self, bitmap: FPDF_BITMAP) -> js_sys::Uint8Array {
-        self.bindings.FPDFBitmap_GetArray(bitmap)
-    }
-
-    #[inline]
-    #[allow(non_snake_case)]
     fn FPDFBitmap_GetWidth(&self, bitmap: FPDF_BITMAP) -> c_int {
         self.bindings.FPDFBitmap_GetWidth(bitmap)
     }
@@ -3025,6 +3018,18 @@ impl<T: PdfiumLibraryBindings> PdfiumLibraryBindings for ThreadSafePdfiumBinding
 
     #[inline]
     #[allow(non_snake_case)]
+    fn FPDF_GetPageSizeByIndexF(
+        &self,
+        document: FPDF_DOCUMENT,
+        page_index: c_int,
+        size: *mut crate::bindgen::FS_SIZEF,
+    ) -> FPDF_BOOL {
+        self.bindings
+            .FPDF_GetPageSizeByIndexF(document, page_index, size)
+    }
+
+    #[inline]
+    #[allow(non_snake_case)]
     fn FPDFAttachment_GetName(
         &self,
         attachment: FPDF_ATTACHMENT,
@@ -3100,5 +3105,12 @@ impl<T: PdfiumLibraryBindings> PdfiumLibraryBindings for ThreadSafePdfiumBinding
     ) -> FPDF_BOOL {
         self.bindings
             .FPDFAttachment_GetFile(attachment, buffer, buflen, out_buflen)
+    }
+
+    #[inline]
+    #[allow(non_snake_case)]
+    #[cfg(target_arch = "wasm32")]
+    fn FPDFBitmap_GetArray(&self, bitmap: FPDF_BITMAP) -> js_sys::Uint8Array {
+        self.bindings.FPDFBitmap_GetArray(bitmap)
     }
 }

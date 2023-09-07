@@ -7,7 +7,7 @@ use crate::bindgen::{
     FPDF_PAGE, FPDF_PAGELINK, FPDF_PAGEOBJECT, FPDF_PAGEOBJECTMARK, FPDF_PAGERANGE,
     FPDF_PATHSEGMENT, FPDF_SCHHANDLE, FPDF_SIGNATURE, FPDF_STRING, FPDF_STRUCTELEMENT,
     FPDF_STRUCTTREE, FPDF_TEXTPAGE, FPDF_TEXT_RENDERMODE, FPDF_WCHAR, FPDF_WIDESTRING, FS_FLOAT,
-    FS_MATRIX, FS_POINTF, FS_QUADPOINTSF, FS_RECTF,
+    FS_MATRIX, FS_POINTF, FS_QUADPOINTSF, FS_RECTF, FS_SIZEF,
 };
 use crate::bindings::PdfiumLibraryBindings;
 use libloading::{Library, Symbol};
@@ -4589,6 +4589,23 @@ impl DynamicPdfiumBindings {
 
     #[inline]
     #[allow(non_snake_case)]
+    fn extern_FPDF_GetPageSizeByIndexF(
+        &self,
+    ) -> Result<
+        Symbol<
+            unsafe extern "C" fn(
+                document: FPDF_DOCUMENT,
+                page_index: c_int,
+                size: *mut FS_SIZEF,
+            ) -> FPDF_BOOL,
+        >,
+        libloading::Error,
+    > {
+        unsafe { self.library.get(b"FPDF_GetPageSizeByIndexF\0") }
+    }
+
+    #[inline]
+    #[allow(non_snake_case)]
     fn extern_FPDFAttachment_GetName(
         &self,
     ) -> Result<
@@ -7740,6 +7757,17 @@ impl PdfiumLibraryBindings for DynamicPdfiumBindings {
     #[allow(non_snake_case)]
     fn FPDFDoc_DeleteAttachment(&self, document: FPDF_DOCUMENT, index: c_int) -> FPDF_BOOL {
         unsafe { self.extern_FPDFDoc_DeleteAttachment().unwrap()(document, index) }
+    }
+
+    #[inline]
+    #[allow(non_snake_case)]
+    fn FPDF_GetPageSizeByIndexF(
+        &self,
+        document: FPDF_DOCUMENT,
+        page_index: c_int,
+        size: *mut FS_SIZEF,
+    ) -> FPDF_BOOL {
+        unsafe { self.extern_FPDF_GetPageSizeByIndexF().unwrap()(document, page_index, size) }
     }
 
     #[inline]
