@@ -615,6 +615,36 @@ pub trait PdfiumLibraryBindings {
     fn FPDFPage_GenerateContent(&self, page: FPDF_PAGE) -> FPDF_BOOL;
 
     #[allow(non_snake_case)]
+    fn FPDF_DeviceToPage(
+        &self,
+        page: FPDF_PAGE,
+        start_x: c_int,
+        start_y: c_int,
+        size_x: c_int,
+        size_y: c_int,
+        rotate: c_int,
+        device_x: c_int,
+        device_y: c_int,
+        page_x: *mut f64,
+        page_y: *mut f64,
+    ) -> FPDF_BOOL;
+
+    #[allow(non_snake_case)]
+    fn FPDF_PageToDevice(
+        &self,
+        page: FPDF_PAGE,
+        start_x: c_int,
+        start_y: c_int,
+        size_x: c_int,
+        size_y: c_int,
+        rotate: c_int,
+        page_x: f64,
+        page_y: f64,
+        device_x: *mut c_int,
+        device_y: *mut c_int,
+    ) -> FPDF_BOOL;
+
+    #[allow(non_snake_case)]
     fn FPDFBitmap_CreateEx(
         &self,
         width: c_int,

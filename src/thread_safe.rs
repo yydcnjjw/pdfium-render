@@ -803,6 +803,46 @@ impl<T: PdfiumLibraryBindings> PdfiumLibraryBindings for ThreadSafePdfiumBinding
 
     #[inline]
     #[allow(non_snake_case)]
+    fn FPDF_DeviceToPage(
+        &self,
+        page: FPDF_PAGE,
+        start_x: ::std::os::raw::c_int,
+        start_y: ::std::os::raw::c_int,
+        size_x: ::std::os::raw::c_int,
+        size_y: ::std::os::raw::c_int,
+        rotate: ::std::os::raw::c_int,
+        device_x: ::std::os::raw::c_int,
+        device_y: ::std::os::raw::c_int,
+        page_x: *mut f64,
+        page_y: *mut f64,
+    ) -> FPDF_BOOL {
+        self.bindings.FPDF_DeviceToPage(
+            page, start_x, start_y, size_x, size_y, rotate, device_x, device_y, page_x, page_y,
+        )
+    }
+
+    #[inline]
+    #[allow(non_snake_case)]
+    fn FPDF_PageToDevice(
+        &self,
+        page: FPDF_PAGE,
+        start_x: ::std::os::raw::c_int,
+        start_y: ::std::os::raw::c_int,
+        size_x: ::std::os::raw::c_int,
+        size_y: ::std::os::raw::c_int,
+        rotate: ::std::os::raw::c_int,
+        page_x: f64,
+        page_y: f64,
+        device_x: *mut ::std::os::raw::c_int,
+        device_y: *mut ::std::os::raw::c_int,
+    ) -> FPDF_BOOL {
+        self.bindings.FPDF_PageToDevice(
+            page, start_x, start_y, size_x, size_y, rotate, page_x, page_y, device_x, device_y,
+        )
+    }
+
+    #[inline]
+    #[allow(non_snake_case)]
     fn FPDFBitmap_CreateEx(
         &self,
         width: c_int,

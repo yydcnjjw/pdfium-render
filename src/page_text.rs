@@ -50,7 +50,7 @@ impl<'a> PdfPageText<'a> {
 
     /// Returns the internal `FPDF_TEXTPAGE` handle for this [PdfPageText].
     #[inline]
-    pub(crate) fn handle(&self) -> &FPDF_TEXTPAGE {
+    pub fn handle(&self) -> &FPDF_TEXTPAGE {
         &self.handle
     }
 

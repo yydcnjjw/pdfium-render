@@ -98,6 +98,8 @@ impl DynamicPdfiumBindings {
         result.extern_FPDFPage_InsertClipPath()?;
         result.extern_FPDFPage_HasTransparency()?;
         result.extern_FPDFPage_GenerateContent()?;
+        result.extern_FPDF_DeviceToPage()?;
+        result.extern_FPDF_PageToDevice()?;
         result.extern_FPDFBitmap_CreateEx()?;
         result.extern_FPDFBitmap_Destroy()?;
         result.extern_FPDFBitmap_GetFormat()?;
@@ -1343,6 +1345,54 @@ impl DynamicPdfiumBindings {
         &self,
     ) -> Result<Symbol<unsafe extern "C" fn(page: FPDF_PAGE) -> FPDF_BOOL>, libloading::Error> {
         unsafe { self.library.get(b"FPDFPage_GenerateContent\0") }
+    }
+
+    #[inline]
+    #[allow(non_snake_case)]
+    fn extern_FPDF_DeviceToPage(
+        &self,
+    ) -> Result<
+        Symbol<
+            unsafe extern "C" fn(
+                page: FPDF_PAGE,
+                start_x: c_int,
+                start_y: c_int,
+                size_x: c_int,
+                size_y: c_int,
+                rotate: c_int,
+                device_x: c_int,
+                device_y: c_int,
+                page_x: *mut f64,
+                page_y: *mut f64,
+            ) -> FPDF_BOOL,
+        >,
+        libloading::Error,
+    > {
+        unsafe { self.library.get(b"FPDF_DeviceToPage\0") }
+    }
+
+    #[inline]
+    #[allow(non_snake_case)]
+    fn extern_FPDF_PageToDevice(
+        &self,
+    ) -> Result<
+        Symbol<
+            unsafe extern "C" fn(
+                page: FPDF_PAGE,
+                start_x: c_int,
+                start_y: c_int,
+                size_x: c_int,
+                size_y: c_int,
+                rotate: c_int,
+                page_x: f64,
+                page_y: f64,
+                device_x: *mut c_int,
+                device_y: *mut c_int,
+            ) -> FPDF_BOOL,
+        >,
+        libloading::Error,
+    > {
+        unsafe { self.library.get(b"FPDF_PageToDevice\0") }
     }
 
     #[inline]
@@ -5447,6 +5497,50 @@ impl PdfiumLibraryBindings for DynamicPdfiumBindings {
     #[allow(non_snake_case)]
     fn FPDFPage_GenerateContent(&self, page: FPDF_PAGE) -> FPDF_BOOL {
         unsafe { self.extern_FPDFPage_GenerateContent().unwrap()(page) }
+    }
+
+    #[inline]
+    #[allow(non_snake_case)]
+    fn FPDF_DeviceToPage(
+        &self,
+        page: FPDF_PAGE,
+        start_x: ::std::os::raw::c_int,
+        start_y: ::std::os::raw::c_int,
+        size_x: ::std::os::raw::c_int,
+        size_y: ::std::os::raw::c_int,
+        rotate: ::std::os::raw::c_int,
+        device_x: ::std::os::raw::c_int,
+        device_y: ::std::os::raw::c_int,
+        page_x: *mut f64,
+        page_y: *mut f64,
+    ) -> FPDF_BOOL {
+        unsafe {
+            self.extern_FPDF_DeviceToPage().unwrap()(
+                page, start_x, start_y, size_x, size_y, rotate, device_x, device_y, page_x, page_y,
+            )
+        }
+    }
+
+    #[inline]
+    #[allow(non_snake_case)]
+    fn FPDF_PageToDevice(
+        &self,
+        page: FPDF_PAGE,
+        start_x: ::std::os::raw::c_int,
+        start_y: ::std::os::raw::c_int,
+        size_x: ::std::os::raw::c_int,
+        size_y: ::std::os::raw::c_int,
+        rotate: ::std::os::raw::c_int,
+        page_x: f64,
+        page_y: f64,
+        device_x: *mut ::std::os::raw::c_int,
+        device_y: *mut ::std::os::raw::c_int,
+    ) -> FPDF_BOOL {
+        unsafe {
+            self.extern_FPDF_PageToDevice().unwrap()(
+                page, start_x, start_y, size_x, size_y, rotate, page_x, page_y, device_x, device_y,
+            )
+        }
     }
 
     #[inline]

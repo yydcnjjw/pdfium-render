@@ -66,7 +66,7 @@ impl PdfPageRenderRotation {
     }
 
     #[inline]
-    pub(crate) fn as_pdfium(&self) -> i32 {
+    pub fn as_pdfium(&self) -> i32 {
         match self {
             PdfPageRenderRotation::None => 0,
             PdfPageRenderRotation::Degrees90 => 1,
@@ -211,7 +211,7 @@ impl<'a> PdfPage<'a> {
 
     /// Returns the internal `FPDF_PAGE` handle for this [PdfPage].
     #[inline]
-    pub(crate) fn page_handle(&self) -> FPDF_PAGE {
+    pub fn page_handle(&self) -> FPDF_PAGE {
         self.page_handle
     }
 
